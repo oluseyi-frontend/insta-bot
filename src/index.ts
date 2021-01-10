@@ -15,9 +15,9 @@ app.listen(port, async () => {
  
       
     })
-  app.post('/followers', async (req, res) => {
-    bot.followers(req.body, res)
-  })
+  // app.post('/followers', async (req, res) => {
+  //   bot.followers(req.body, res)
+  // })
  
  
   

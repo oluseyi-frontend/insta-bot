@@ -24,7 +24,7 @@ export default class BotService {
     const interval = setInterval(async () => {
       if (!this.usersToFollow || this.usersToFollow.length < 1) {
         await this.getLatestPostLikers(body)
-          .then(() => {})
+          
           .catch((err) => {
             if (err) {
               res.status(200).json({ msg: "the user to parse is incorrect" });
@@ -77,13 +77,13 @@ export default class BotService {
       .then((data) => {
         const loggedInAccount = this.ig.account
           .login(body.user, body.password)
-          .then((data) => {
+          .then((data2) => {
             this.ig.simulate
               .postLoginFlow()
-              .then((data) => {
+              .then((data3) => {
                 this.run(body, res);
               })
-              .catch((err) => {});
+              
           })
           .catch((err) => {
             if (err) {
@@ -93,39 +93,39 @@ export default class BotService {
             }
           });
       })
-      .catch((err) => {});
+      
   }
 
-  async followers(body, res) {
-    this.ig.state.generateDevice(body.user);
-    this.ig.simulate.preLoginFlow().then(() => {
-      this.ig.account
-        .login(body.user, body.password)
-        .then((data) => {
-          this.ig.simulate.postLoginFlow().then(() => {
+//   async followers(body, res) {
+//     this.ig.state.generateDevice(body.user);
+//     this.ig.simulate.preLoginFlow().then(() => {
+//       this.ig.account
+//         .login(body.user, body.password)
+//         .then((data) => {
+//           this.ig.simulate.postLoginFlow().then(() => {
           
 
-            this.ig.feed.accountFollowers(data.pk).items$.subscribe(
-              (followers) => {
+//             this.ig.feed.accountFollowers(data.pk).items$.subscribe(
+//               (followers) => {
               
-                  followers.map((follower) => {
+//                 //   followers.map((follower) => {
                    
-                  }),
-                  res.json(followers);
-              },
-              (error) => console.error(error),
-                () => {
+//                 //   }),
+//                   res.json(followers);
+//               },
+//               (error) =>{},
+//                 () => {
                   
-              }
-            );
-            //   this.ig.feed.accountFollowers(data.pk).items().then((data) => {
+//               }
+//             );
+//             //   this.ig.feed.accountFollowers(data.pk).items().then((data) => {
            
-            // })
-          });
-        })
-        .catch((err) => {
+//             // })
+//           });
+//         })
+//         .catch((err) => {
         
-        });
-    });
-  }
+//         });
+//     });
+//   }
 }
