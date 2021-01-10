@@ -1,9 +1,9 @@
 import express from "express";
 import BotService from './services/services';
-import cors from 'cors'
 const app = express();
 const port = 8080 || process.env.PORT;
 const bot = new BotService();
+import cors from "cors"
 
 app.listen(port, async () => {
 
