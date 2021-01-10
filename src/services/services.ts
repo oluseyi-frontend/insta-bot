@@ -1,0 +1,129 @@
+import {
+  IgApiClient,
+  MediaRepositoryLikersResponseUsersItem,
+} from "instagram-private-api";
+import { config } from "dotenv";
+import axios from "axios";
+import { request } from "express";
+
+export default class BotService {
+  ig: IgApiClient;
+  user: string;
+  password: string;
+
+  usersToFollow: MediaRepositoryLikersResponseUsersItem[];
+  count: string[] = [];
+
+  constructor() {
+    this.ig = new IgApiClient();
+  }
+
+  async run(body, res) {
+    const getWaitTime = () => Math.random() * 10 * 10000;
+    console.log(getWaitTime());
+    const interval = setInterval(async () => {
+      if (!this.usersToFollow || this.usersToFollow.length < 1) {
+        await this.getLatestPostLikers(body)
+          .then(() => {})
+          .catch((err) => {
+            if (err) {
+              res.status(200).json({ msg: "the user to parse is incorrect" });
+              clearInterval(interval);
+            }
+          });
+      } else {
+        let user = this.usersToFollow.pop();
+        while (user.is_private) {
+          user = this.usersToFollow.pop();
+        }
+
+        await this.follow(user.pk);
+        this.count.push(user.username);
+        getWaitTime();
+      }
+      if (this.count.length > 50) {
+        res.json({
+          log: {
+            login: "successfully logged you in",
+            followed: `you have followed ${this.count.length} users`,
+            limit: `you have reached the limit, bot stopped`,
+          },
+        });
+        clearInterval(interval);
+        this.count = [];
+      }
+    }, 20000);
+  }
+
+  async follow(userId: number) {
+    await this.ig.friendship.create(userId);
+  }
+
+  async getLatestPostLikers(body) {
+    const id = await this.ig.user.getIdByUsername(body.accountToParse);
+    const feed = await this.ig.feed.user(id);
+    const posts = await feed.items();
+    this.usersToFollow = await (
+      await this.ig.media.likers(posts[body.postId].id)
+    ).users;
+  }
+
+  login(body, res) {
+    console.log(body);
+
+    this.ig.state.generateDevice(body.user);
+    this.ig.simulate
+      .preLoginFlow()
+      .then((data) => {
+        const loggedInAccount = this.ig.account
+          .login(body.user, body.password)
+          .then((data) => {
+            this.ig.simulate
+              .postLoginFlow()
+              .then((data) => {
+                this.run(body, res);
+              })
+              .catch((err) => {});
+          })
+          .catch((err) => {
+            if (err) {
+              res
+                .status(200)
+                .json({ msg: "username or password is incorrect" });
+            }
+          });
+      })
+      .catch((err) => {});
+  }
+
+  async followers(body, res) {
+    this.ig.state.generateDevice(body.user);
+    this.ig.simulate.preLoginFlow().then(() => {
+      this.ig.account
+        .login(body.user, body.password)
+        .then((data) => {
+          this.ig.simulate.postLoginFlow().then(() => {
+            console.log("logged in");
+
+            this.ig.feed.accountFollowers(data.pk).items$.subscribe(
+              (followers) => {
+                console.log(followers.length),
+                  followers.map((follower) => {
+                    console.log(follower.pk);
+                  }),
+                  res.json(followers);
+              },
+              (error) => console.error(error),
+              () => console.log("Complete!")
+            );
+            //   this.ig.feed.accountFollowers(data.pk).items().then((data) => {
+            // //console.log(data);
+            // })
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  }
+}
