@@ -20,7 +20,7 @@ export default class BotService {
 
   async run(body, res) {
     const getWaitTime = () => Math.random() * 10 * 10000;
-    console.log(getWaitTime());
+  
     const interval = setInterval(async () => {
       if (!this.usersToFollow || this.usersToFollow.length < 1) {
         await this.getLatestPostLikers(body)
@@ -69,7 +69,7 @@ export default class BotService {
   }
 
   login(body, res) {
-    console.log(body);
+   
 
     this.ig.state.generateDevice(body.user);
     this.ig.simulate
@@ -103,26 +103,28 @@ export default class BotService {
         .login(body.user, body.password)
         .then((data) => {
           this.ig.simulate.postLoginFlow().then(() => {
-            console.log("logged in");
+          
 
             this.ig.feed.accountFollowers(data.pk).items$.subscribe(
               (followers) => {
-                console.log(followers.length),
+              
                   followers.map((follower) => {
-                    console.log(follower.pk);
+                   
                   }),
                   res.json(followers);
               },
               (error) => console.error(error),
-              () => console.log("Complete!")
+                () => {
+                  
+              }
             );
             //   this.ig.feed.accountFollowers(data.pk).items().then((data) => {
-            // //console.log(data);
+           
             // })
           });
         })
         .catch((err) => {
-          console.log(err);
+        
         });
     });
   }
