@@ -15,6 +15,10 @@ app.listen(port, async () => {
  
       
     })
+  
+  app.get('/', ((req, res) => {
+    res.send('<h1>this API is owned by K, Contact on whatsapp, +2348114426271<h1>')
+  }))
   // app.post('/followers', async (req, res) => {
   //   bot.followers(req.body, res)
   // })
