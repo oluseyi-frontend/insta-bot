@@ -2,7 +2,7 @@
   "name": "insta-services",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "index.ts",
   "engines": {
     "node": "14.4.0"
   },
@@ -10,8 +10,8 @@
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node src/index.ts",
-    "dev": "ts-node-dev src/index.ts",
+    "start": "node index.ts",
+    "dev": "ts-node-dev index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
