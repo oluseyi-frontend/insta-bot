@@ -4,11 +4,11 @@ const app = express();
 const port = 8080 || process.env.PORT;
 const bot = new BotService();
 import cors from "cors"
-
+app.use(cors())
 app.listen(port, async () => {
 
     app.use(express.json());
-    app.use(cors());
+    
     app.post('/login', async (req, res) => {
        
         await bot.login(req.body, res)
@@ -26,5 +26,5 @@ app.listen(port, async () => {
  
   
   // tslint:disable-next-line:no-console
-  
+  console.log(`server started on port ${port}`)
 });
