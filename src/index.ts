@@ -5,7 +5,7 @@ const port =process.env.PORT || 8080;
 const bot = new BotService();
 import cors from "cors"
 app.use(cors())
-app.listen(port, async () => {
+
 
     app.use(express.json());
     
@@ -24,7 +24,7 @@ app.listen(port, async () => {
   // })
  
  
-  
+  app.listen(port, async () => {
   // tslint:disable-next-line:no-console
   console.log(`server started on port ${port}`)
 });
