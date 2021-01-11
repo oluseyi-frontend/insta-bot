@@ -20,11 +20,11 @@ export default class BotService {
 
   async run(body, res) {
     const getWaitTime = () => Math.random() * 10 * 10000;
-  
+
     const interval = setInterval(async () => {
       if (!this.usersToFollow || this.usersToFollow.length < 1) {
         await this.getLatestPostLikers(body)
-          
+
           .catch((err) => {
             if (err) {
               res.status(200).json({ msg: "the user to parse is incorrect" });
@@ -69,7 +69,7 @@ export default class BotService {
   }
 
   login(body, res) {
-   
+
 
     this.ig.state.generateDevice(body.user);
     this.ig.simulate
@@ -83,7 +83,7 @@ export default class BotService {
               .then((data3) => {
                 this.run(body, res);
               })
-              
+
           })
           .catch((err) => {
             if (err) {
@@ -93,7 +93,7 @@ export default class BotService {
             }
           });
       })
-      
+
   }
 
 //   async followers(body, res) {
@@ -103,28 +103,28 @@ export default class BotService {
 //         .login(body.user, body.password)
 //         .then((data) => {
 //           this.ig.simulate.postLoginFlow().then(() => {
-          
+
 
 //             this.ig.feed.accountFollowers(data.pk).items$.subscribe(
 //               (followers) => {
-              
+
 //                 //   followers.map((follower) => {
-                   
+
 //                 //   }),
 //                   res.json(followers);
 //               },
 //               (error) =>{},
 //                 () => {
-                  
+
 //               }
 //             );
 //             //   this.ig.feed.accountFollowers(data.pk).items().then((data) => {
-           
+
 //             // })
 //           });
 //         })
 //         .catch((err) => {
-        
+
 //         });
 //     });
 //   }
