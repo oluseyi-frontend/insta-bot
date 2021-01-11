@@ -1,7 +1,7 @@
 import express from "express";
 import BotService from './services/services';
 const app = express();
-const port = 8080 || process.env.PORT;
+const port =process.env.PORT || 8080;
 const bot = new BotService();
 import cors from "cors"
 app.use(cors())
