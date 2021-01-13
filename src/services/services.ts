@@ -52,7 +52,7 @@ export default class BotService {
         clearInterval(interval);
         this.count = [];
       }
-    }, 15000);
+    }, 30000);
   }
 
   async follow(userId: number) {
